@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}
+Resultaat
+{% endblock title %}
+
+{% block content %}
+    <h1>{{ user.username }}, je scoorde {{ score }} punten</h1>
+
+    {% for antwoord in user_antwoorden %}
+        <li>{{ antwoord }}</li>
+    {% endfor %}
+{% endblock content %}

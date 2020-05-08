@@ -14,4 +14,9 @@ def quiz(request):
 def quiz_maken(request, quiz_id):
     quiz = get_object_or_404(Quiz, pk=quiz_id)
     vragenlist = quiz.vraag_set.all()
-    return render(request, 'quiz_maken.html', {'vraag_list': vragenlist})
+    return render(request, 'quiz_maken.html', {'vraag_list': vragenlist, 'quiz': quiz})
+
+def quiz_resultaat(request, quiz_id):
+    quiz = get_object_or_404(Quiz, pk=quiz_id)
+    vragen_list = quiz.vraag_set.all()
+    return render(request, 'resultaat.html', {})

@@ -8,7 +8,7 @@ Quiz
     {% if quiz_list != None %}
     <ul>
         {% for quiz in quiz_list %}
-        <li><a href="{% url 'enquete:quiz' quiz.id %}">{{ quiz.quiz_titel }} {{ quiz.id }}</a></li>
+        <li><a href="{% url 'enquete:quizStart' quiz.id %}">{{ quiz.quiz_titel }}</a></li>
         {% endfor %}
     </ul>
     {% else %}
