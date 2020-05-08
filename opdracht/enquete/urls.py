@@ -6,5 +6,6 @@ from . import views
 app_name = 'enquete'
 urlpatterns = [
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
-    path('quiz/', TemplateView.as_view(template_name='quiz.html'), name='quiz')
+    path('quiz/', views.quiz, name='quiz'),
+    path('quiz/<int:quiz_id>', views.quiz_maken, name='quizStart'),
 ]

@@ -5,5 +5,13 @@ Quiz
 {% endblock title %}
 
 {% block content %}
-
+    {% if quiz_list != None %}
+    <ul>
+        {% for quiz in quiz_list %}
+        <li><a href="{% url 'enquete:quiz' quiz.id %}">{{ quiz.quiz_titel }} {{ quiz.id }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>Er zijn nog geen quizzen</p>
+    {% endif %}
 {% endblock content %}

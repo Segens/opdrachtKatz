@@ -28,7 +28,7 @@ class Vraag(models.Model):
     vraag_meerdere = models.BooleanField(verbose_name='Meerdere juiste antwoorden')
     
     def __str__(self):
-        return self.vraag_tekst + ' | ' + self.vraag_type
+        return self.vraag_tekst
     
 class Antwoord(models.Model):
     class Meta:
