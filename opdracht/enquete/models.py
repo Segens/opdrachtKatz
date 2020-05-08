@@ -4,6 +4,7 @@ from django.db import models
 class Vraag(models.Model):
     class Meta:
         verbose_name_plural = 'vragen'
+
     TYPES = (
         ('open', 'Open'),
         ('multichoice', 'Multiple Choice'),
@@ -13,12 +14,19 @@ class Vraag(models.Model):
     vraag_tekst = models.CharField(max_length=200)
     vraag_type = models.CharField(max_length=50, choices=TYPES)
     vraag_score = models.FloatField()
+    vraag_meerdere = models.BooleanField(verbose_name='Meerdere juiste antwoorden')
     
     def __str__(self):
-        return self.vraag_tekst
+        return self.vraag_tekst + ' | ' + self.vraag_type
     
 class Antwoord(models.Model):
+    class Meta:
+        verbose_name_plural = 'antwoorden'
+
     vraag = models.ForeignKey(Vraag, on_delete=models.CASCADE)
-    antwoord_open = models.CharField(max_length=200)
-    antwoord_multi = models.CharField(max_length=250)
-    antwoord_ja_nee = models.BooleanField()
+    antwoord_tekst = models.CharField(max_length=200)
+    antwoord_juist = models.BooleanField()
+
+    def __str__(self):
+        return self.antwoord_tekst
+    
