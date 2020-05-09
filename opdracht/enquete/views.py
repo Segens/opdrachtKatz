@@ -35,6 +35,9 @@ def quiz_resultaat(request, quiz_id):
     user_antwoord_ids = list(map(int, user_antwoord_ids))
     
     juiste_antwoorden = Antwoord.objects.filter(antwoord_juist=True)
+
+    for antwoord in juiste_antwoorden:
+        max_score += antwoord.antwoord_score
     
     def get_antwoord_ids(list_antwoorden):
         list_ids = []
@@ -52,7 +55,7 @@ def quiz_resultaat(request, quiz_id):
 
         if vraag.vraag_type == 'open':
             user_value = q.get(str(match))
-            
+
             if user_value == juist_antwoord.antwoord_tekst:
                 score += juist_antwoord.antwoord_score
         else:
