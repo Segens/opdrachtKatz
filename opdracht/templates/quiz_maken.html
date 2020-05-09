@@ -13,22 +13,22 @@
             {% endif %}
 
             {% if vraag.vraag_type == 'open' %}
-            <input type="text" id="{{ vraag.id }}" name="vraag{{ vraag.id }}">
+            <input type="text" id="{{ vraag.id }}" name="{{ vraag.antwoord_set.get.id }}">
 
             {% elif vraag.vraag_type == 'multichoice' %}
                 {% if vraag.vraag_meerdere %}
-                <p>Meerdere juiste antwoorden</p>
+                <p>Let op! Meerdere juiste antwoorden</p>
                 {% endif %}
 
                 {% for antwoord in vraag.antwoord_set.all %}
-                    <input type="checkbox" name="vraag{{ vraag.id }}" id="{{ vraag.id }}">
-                    <label for="{{ antwoord.id }}">{{ antwoord.antwoord_tekst }}</label>
+                    <input type="checkbox" name="{{ antwoord.id }}" id="{{ vraag.id }}">
+                    <label for="antwoord{{ antwoord.id }}">{{ antwoord.antwoord_tekst }}</label>
                     <br>
                 {% endfor %}
             
                 {% elif vraag.vraag_type == 'jaNee' %}
                     {% for antwoord in vraag.antwoord_set.all %}
-                    <input type="radio" name="vraag{{ vraag.id }}" id="{{ vraag.id }}">
+                    <input type="radio" name="{{ antwoord.id }}" id="{{ vraag.id }}">
                     <label for="{{ vraag.id }}">{{ antwoord.antwoord_tekst }}</label>
                     <br>
                     {% endfor %}
