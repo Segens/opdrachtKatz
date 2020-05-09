@@ -36,8 +36,14 @@ def quiz_resultaat(request, quiz_id):
     
     juiste_antwoorden = Antwoord.objects.filter(antwoord_juist=True)
 
-    for antwoord in juiste_antwoorden:
-        max_score += antwoord.antwoord_score
+    juiste_antwoorden_quiz = []
+
+    # Totale score berekenen per quiz.
+    for vraag in vragen_list:
+        juiste_antwoorden = vraag.antwoord_set.filter(antwoord_juist=True)
+        
+        for antwoord in juiste_antwoorden:
+            max_score += antwoord.antwoord_score
     
     def get_antwoord_ids(list_antwoorden):
         list_ids = []
