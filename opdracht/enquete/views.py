@@ -67,6 +67,4 @@ def quiz_resultaat(request, quiz_id):
         else:
             score += juist_antwoord.antwoord_score
 
-    print(user_value)
-
     return render(request, 'resultaat.html', {'user_score': score, 'max_score': max_score})
