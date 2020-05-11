@@ -6,12 +6,6 @@
         {% for vraag in vraag_list %}
             <h3>{{ vraag.vraag_tekst }}</h3>
 
-            {% if vraag.vraag_score > 1.0 %}
-                <p>Deze vraag staat op {{ vraag.vraag_score }} punten</p>
-            {% else %}
-                <p>Deze vraag staat op {{ vraag.vraag_score }} punt</p>
-            {% endif %}
-
             {% if vraag.vraag_type == 'open' %}
             <input type="text" id="{{ vraag.id }}" name="{{ vraag.antwoord_set.get.id }}">
 

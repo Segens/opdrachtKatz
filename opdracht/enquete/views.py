@@ -20,45 +20,53 @@ def quiz_resultaat(request, quiz_id):
     quiz = get_object_or_404(Quiz, pk=quiz_id)
     vragen_list = quiz.vraag_set.all()
     user_antwoorden = []
-    juiste_ids = []
     max_score = 0.0
     score = 0.0
 
-    # Loop die alle data uit het post request haalt en deze in een list stopt.
-    for data in request.POST:
-        user_antwoorden.append(data)
+    q = QueryDict()
+    q = request.POST
+    user_antwoorden.extend(q.items())
     
-    # Verwijdert de csrftoken uit de list.
-    user_antwoorden.pop(0)
+    user_antwoord_ids = [antwoord[0] for antwoord in user_antwoorden]
+    
+    user_antwoord_ids = [id for id in user_antwoord_ids if str.isdigit(id)]
 
-    # Convert alle strings in de lijst naar integers
-    user_antwoorden = list(map(int, user_antwoorden))
+    # Map list naar integers
+    user_antwoord_ids = list(map(int, user_antwoord_ids))
+    
+    juiste_antwoorden = Antwoord.objects.filter(antwoord_juist=True)
 
-    print(user_antwoorden)
+    juiste_antwoorden_quiz = []
 
+    # Totale score berekenen per quiz.
     for vraag in vragen_list:
-        for juist_antwoord in vraag.antwoord_set.filter(antwoord_juist=True):
-            juiste_ids.append(juist_antwoord.id)
+        juiste_antwoorden = vraag.antwoord_set.filter(antwoord_juist=True)
+        
+        for antwoord in juiste_antwoorden:
+            max_score += antwoord.antwoord_score
+    
+    def get_antwoord_ids(list_antwoorden):
+        list_ids = []
+        for antwoord in list_antwoorden:
+            list_ids.append(antwoord.id)
+        return list_ids
 
-    print(juiste_ids)
+    juiste_antwoorden_ids = get_antwoord_ids(juiste_antwoorden)
 
-    matches = set(user_antwoorden).intersection(juiste_ids)
-    print(matches)
+    matches = set(user_antwoord_ids).intersection(juiste_antwoorden_ids)
 
-    for id in juiste_ids:
-        antwoord = get_object_or_404(Antwoord, id=id)
+    for match in matches:
+        vraag = Antwoord.objects.get(id=match).vraag
+        juist_antwoord = Antwoord.objects.get(id=match)
 
-        if antwoord.vraag.vraag_meerdere:
-            max_score += antwoord.vraag.vraag_score / 2
+        if vraag.vraag_type == 'open':
+            user_value = q.get(str(match))
+
+            if user_value == juist_antwoord.antwoord_tekst:
+                score += juist_antwoord.antwoord_score
         else:
-            max_score += antwoord.vraag.vraag_score
+            score += juist_antwoord.antwoord_score
 
-    for id in matches:
-        antwoord = get_object_or_404(Antwoord, id=id)
-
-        if antwoord.vraag.vraag_meerdere:
-            score += antwoord.vraag.vraag_score / 2
-        else:
-            score += antwoord.vraag.vraag_score
+    print(user_value)
 
     return render(request, 'resultaat.html', {'user_score': score, 'max_score': max_score})
