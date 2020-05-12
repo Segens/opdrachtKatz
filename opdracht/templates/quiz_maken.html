@@ -1,33 +1,44 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form action="{% url 'enquete:resultaat' quiz.id %}" method="post">
-    {% csrf_token %}
-        {% for vraag in vraag_list %}
-            <h3>{{ vraag.vraag_tekst }}</h3>
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">{{ quiz.quiz_titel }}</h1>
+        <p class="text-muted">{{ quiz.quiz_beschrijving }}</p>
+        
+        <hr>
 
-            {% if vraag.vraag_type == 'open' %}
-            <input type="text" id="{{ vraag.id }}" name="{{ vraag.antwoord_set.get.id }}">
+        <form action="{% url 'enquete:resultaat' quiz.id %}" method="post">
+        {% csrf_token %}
+            {% for vraag in vraag_list %}
+                <h3>{{ vraag.vraag_tekst }}</h3>
 
-            {% elif vraag.vraag_type == 'multichoice' %}
-                {% if vraag.vraag_meerdere %}
-                <p>Let op! Meerdere juiste antwoorden</p>
-                {% endif %}
+                {% if vraag.vraag_type == 'open' %}
+                <input type="text" id="{{ vraag.id }}" name="{{ vraag.antwoord_set.get.id }}">
 
-                {% for antwoord in vraag.antwoord_set.all %}
-                    <input type="checkbox" name="{{ antwoord.id }}" id="{{ vraag.id }}">
-                    <label for="antwoord{{ antwoord.id }}">{{ antwoord.antwoord_tekst }}</label>
-                    <br>
-                {% endfor %}
-            
-                {% elif vraag.vraag_type == 'jaNee' %}
+                {% elif vraag.vraag_type == 'multichoice' %}
+                    {% if vraag.vraag_meerdere %}
+                    <p>Let op! Meerdere juiste antwoorden</p>
+                    {% endif %}
+
                     {% for antwoord in vraag.antwoord_set.all %}
-                    <input type="radio" name="{{ antwoord.id }}" id="{{ vraag.id }}">
-                    <label for="{{ vraag.id }}">{{ antwoord.antwoord_tekst }}</label>
-                    <br>
+                        <input type="checkbox" name="{{ antwoord.id }}" id="{{ vraag.id }}">
+                        <label for="antwoord{{ antwoord.id }}">{{ antwoord.antwoord_tekst }}</label>
+                        <br>
                     {% endfor %}
-            {% endif %}
-        {% endfor %}
-        <input type="submit" value="Stuur in">
-    </form>
+                
+                    {% elif vraag.vraag_type == 'jaNee' %}
+                        {% for antwoord in vraag.antwoord_set.all %}
+                        <input type="radio" name="{{ antwoord.id }}" id="{{ vraag.id }}">
+                        <label for="{{ vraag.id }}">{{ antwoord.antwoord_tekst }}</label>
+                        <br>
+                        {% endfor %}
+                {% endif %}
+                <br>
+            {% endfor %}
+            <br>
+            <input type="submit" class="btn btn-primary" value="Stuur in">
+        </form>
+    </div>
+    </div>
 {% endblock content %}

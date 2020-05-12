@@ -5,7 +5,7 @@
 {% block content %}
     {% if user.is_authenticated %}
         <h1>Dag, {{ user.username }}</h1>
-        <p>Vul de <a href="{% url 'enquete:quizlist' %}">quiz</a> in</p>
+        <p>Bekijk de lijst van <a href="{% url 'enquete:quizlist' %}">quizzen</a></p>
         <p><a href="{% url 'logout' %}">logout</a></p>
     {% else %}
         <p>You are not logged in</p>

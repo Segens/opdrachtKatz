@@ -17,7 +17,7 @@ def quiz_maken(request, quiz_id):
     return render(request, 'quiz_maken.html', {'vraag_list': vragenlist, 'quiz': quiz})
 
 def quiz_resultaat(request, quiz_id):
-    quiz = get_object_or_404(Quiz, pk=quiz_id)
+    quiz = Quiz.objects.get(pk=quiz_id)
     vragen_list = quiz.vraag_set.all()
     user_antwoorden = []
     max_score = 0.0
@@ -33,27 +33,31 @@ def quiz_resultaat(request, quiz_id):
 
     # Map list naar integers
     user_antwoord_ids = list(map(int, user_antwoord_ids))
+
+    print(user_antwoord_ids)
     
     juiste_antwoorden = Antwoord.objects.filter(antwoord_juist=True)
 
-    juiste_antwoorden_quiz = []
-
     # Totale score berekenen per quiz.
     for vraag in vragen_list:
-        juiste_antwoorden = vraag.antwoord_set.filter(antwoord_juist=True)
+        juiste_antwoorden_per_quiz = vraag.antwoord_set.filter(antwoord_juist=True)
         
-        for antwoord in juiste_antwoorden:
+        for antwoord in juiste_antwoorden_per_quiz:
             max_score += antwoord.antwoord_score
     
-    def get_antwoord_ids(list_antwoorden):
+    def get_antwoord_ids():
         list_ids = []
-        for antwoord in list_antwoorden:
-            list_ids.append(antwoord.id)
+        for vraag in vragen_list:
+            juiste_antwoorden = vraag.antwoord_set.filter(antwoord_juist=True)
+            for antwoord in juiste_antwoorden:
+                list_ids.append(antwoord.id)
         return list_ids
 
-    juiste_antwoorden_ids = get_antwoord_ids(juiste_antwoorden)
+    juiste_antwoorden_ids = get_antwoord_ids()
 
-    matches = set(user_antwoord_ids).intersection(juiste_antwoorden_ids)
+    print(juiste_antwoorden_ids)
+
+    matches = set(user_antwoord_ids).intersection(juiste_antwoorden)
 
     for match in matches:
         vraag = Antwoord.objects.get(id=match).vraag

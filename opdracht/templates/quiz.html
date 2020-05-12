@@ -5,13 +5,20 @@ Quiz
 {% endblock title %}
 
 {% block content %}
-    {% if quiz_list != None %}
-    <ul>
-        {% for quiz in quiz_list %}
-        <li><a href="{% url 'enquete:quizStart' quiz.id %}">{{ quiz.quiz_titel }}</a></li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>Er zijn nog geen quizzen</p>
-    {% endif %}
+    <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">Quiz lijst</h1>
+        <p class="lead">Hieronder vind je een lijst van de beschikbare quizzen.</p>
+        {% if quiz_list != None %}
+        <ul class="list-group">
+            {% for quiz in quiz_list %}
+            <li class="list-group-item"><a href="{% url 'enquete:quizStart' quiz.id %}">{{ quiz.quiz_titel }}</a>
+            <p class="text-muted">{{ quiz.quiz_beschrijving }}</p></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>Er zijn nog geen quizzen</p>
+        {% endif %}
+    </div>
+    </div>
 {% endblock content %}
