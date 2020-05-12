@@ -29,7 +29,7 @@
                 
                     {% elif vraag.vraag_type == 'jaNee' %}
                         {% for antwoord in vraag.antwoord_set.all %}
-                        <input type="radio" name="{{ antwoord.id }}" id="{{ vraag.id }}">
+                        <input type="radio" name="jaNee{{ vraag.id }}" id="{{ vraag.id }}">
                         <label for="{{ vraag.id }}">{{ antwoord.antwoord_tekst }}</label>
                         <br>
                         {% endfor %}
