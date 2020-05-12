@@ -4,7 +4,19 @@ Resultaat
 {% endblock title %}
 
 {% block content %}
-    <h1>{{ user.username }}, je scoorde {{ user_score }} van de {{ max_score }} punten.</h1>
+    <div class="jumbotron text-center">
+        <h1 class="mt-5">{{ user.username }}, je scoorde {{ user_score }} van de {{ max_score }} punten.</h1>
+        
+        {% if user_score >= max_score_helft %}
+            <p class="lead">Goed gedaan!</p>
+        {% else %}
+            <p class="lead">Spijtig, better luck next time.</p>
+        {% endif %}
+
+        <hr>
+
+        <a href="{% url 'enquete:quizlist' %}"><input type="button" value="Terug naar lijst" class="btn btn-primary"></a>
+    </div>
 
     
 {% endblock content %}

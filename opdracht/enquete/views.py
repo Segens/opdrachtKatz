@@ -77,9 +77,9 @@ def quiz_resultaat(request, quiz_id):
         if vraag.vraag_type == 'open':
             user_value = q.get(str(match))
 
-            if user_value == juist_antwoord.antwoord_tekst:
+            if user_value.lower() == juist_antwoord.antwoord_tekst.lower():
                 score += juist_antwoord.antwoord_score
         else:
             score += juist_antwoord.antwoord_score
 
-    return render(request, 'resultaat.html', {'user_score': score, 'max_score': max_score})
+    return render(request, 'resultaat.html', {'user_score': score, 'max_score': max_score, 'max_score_helft': max_score / 2})
