@@ -20,8 +20,8 @@ def quiz_resultaat(request, quiz_id):
     quiz = Quiz.objects.get(pk=quiz_id)
     vragen_list = quiz.vraag_set.all()
     user_antwoorden = []
-    max_score = 0.0
-    score = 0.0
+    max_score = 0
+    score = 0
 
     q = QueryDict()
     q = request.POST
@@ -35,6 +35,7 @@ def quiz_resultaat(request, quiz_id):
     # Map list naar integers
     user_antwoord_ids = list(map(int, user_antwoord_ids))
 
+    # Check of de vraag een ja/nee vraag is en indien ja, vervang vraag id naar antwoord id als het gegeven antwoord juist is.
     for id in user_antwoord_ids:
         for vraag in vragen_list:
             if vraag.id == id and vraag.vraag_type == 'jaNee':
@@ -45,8 +46,6 @@ def quiz_resultaat(request, quiz_id):
                     user_antwoord_ids.append(juiste_antwoord.id)
                 else:
                     user_antwoord_ids.remove(id)
-
-    print(user_antwoord_ids)
     
     juiste_antwoorden = Antwoord.objects.filter(antwoord_juist=True)
 
@@ -67,7 +66,7 @@ def quiz_resultaat(request, quiz_id):
 
     juiste_antwoorden_ids = get_antwoord_ids()
 
-
+    # Vergelijken tussen gegeven antwoorden en de juiste antwoorden.
     matches = set(user_antwoord_ids).intersection(juiste_antwoorden_ids)
 
     for match in matches:
