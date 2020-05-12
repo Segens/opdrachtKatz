@@ -26,6 +26,7 @@ def quiz_resultaat(request, quiz_id):
     q = QueryDict()
     q = request.POST
     user_antwoorden.extend(q.items())
+    user_antwoorden.pop(0)
     
     user_antwoord_ids = [antwoord[0] for antwoord in user_antwoorden]
     
@@ -33,6 +34,17 @@ def quiz_resultaat(request, quiz_id):
 
     # Map list naar integers
     user_antwoord_ids = list(map(int, user_antwoord_ids))
+
+    for id in user_antwoord_ids:
+        for vraag in vragen_list:
+            if vraag.id == id and vraag.vraag_type == 'jaNee':
+                user_antwoord = request.POST.get(str(id))
+                juiste_antwoord = vraag.antwoord_set.get(antwoord_juist=True)
+                if user_antwoord.lower() == juiste_antwoord.antwoord_tekst.lower():
+                    user_antwoord_ids.remove(id)
+                    user_antwoord_ids.append(juiste_antwoord.id)
+                else:
+                    user_antwoord_ids.remove(id)
 
     print(user_antwoord_ids)
     
@@ -55,9 +67,8 @@ def quiz_resultaat(request, quiz_id):
 
     juiste_antwoorden_ids = get_antwoord_ids()
 
-    print(juiste_antwoorden_ids)
 
-    matches = set(user_antwoord_ids).intersection(juiste_antwoorden)
+    matches = set(user_antwoord_ids).intersection(juiste_antwoorden_ids)
 
     for match in matches:
         vraag = Antwoord.objects.get(id=match).vraag

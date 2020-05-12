@@ -23,13 +23,13 @@
 
                     {% for antwoord in vraag.antwoord_set.all %}
                         <input type="checkbox" name="{{ antwoord.id }}" id="{{ vraag.id }}">
-                        <label for="antwoord{{ antwoord.id }}">{{ antwoord.antwoord_tekst }}</label>
+                        <label for="{{ antwoord.id }}">{{ antwoord.antwoord_tekst }}</label>
                         <br>
                     {% endfor %}
                 
                     {% elif vraag.vraag_type == 'jaNee' %}
                         {% for antwoord in vraag.antwoord_set.all %}
-                        <input type="radio" name="jaNee{{ vraag.id }}" id="{{ vraag.id }}">
+                        <input type="radio" name="{{ vraag.id }}" id="{{ vraag.id }}" value="{{ antwoord.antwoord_tekst }}">
                         <label for="{{ vraag.id }}">{{ antwoord.antwoord_tekst }}</label>
                         <br>
                         {% endfor %}
